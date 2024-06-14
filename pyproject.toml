@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "sqlagent"
-version = "0.1.0"
+version = "0.1.2"
 description = "SQL agent, query your database"
 authors = ["vikyw89 <vikyw89@gmail.com>"]
 readme = "README.md"
