@@ -16,17 +16,19 @@ The SQL Agent Library allows users to interact with SQL databases using natural 
 To install the SQL Agent Library, use pip:
 
 ```bash
-pip install sql-agent-library
+pip install sqlagent
 ```
 
 ## Usage
 
 Here's a quick example to get you started:
 
-### Step 1: Import the Library
+### Step 1: Do ingestion of db
 
 ```python
-from sql_agent_library import SQLAgent
+from sqlagent.ingestions import load_and_persist_object_index
+
+await load_and_persist_object_index.arun(db_url=os.getenv("DATABASE_URL",""), api_key=os.getenv("OPENAI_API_KEY",""),object_index_dir="./object_index", model="gpt-3.5-turbo")
 ```
 
 ### Step 2: Initialize the Agent
@@ -39,23 +41,14 @@ agent = SQLAgent(db_connection_string="your_database_connection_string")
 ### Step 3: Query the Database
 
 ```python
-# Input: Describe your query in natural language
-human_language_query = "Get the names and email addresses of all users who registered last month."
-
-# Output: Get the query result
-result = agent.query(human_language_query)
-
-# Print the result
-print(result)
+from sqlagent import agent
+await agent.arun(query="show tables", api_key=os.getenv("OPENAI_API_KEY",""), model="gpt-3.5-turbo",db_url=os.getenv("DATABASE_URL",""))
 ```
 
 ## Configuration
 
 You can configure the SQL Agent Library to connect to your specific database by providing the appropriate connection string during initialization.
-
-```python
-agent = SQLAgent(db_connection_string="mysql://username:password@host:port/database")
-```
+it's utilizing sqlachemy under the hood
 
 ## Supported Databases
 
