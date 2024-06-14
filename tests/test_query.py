@@ -1,14 +1,16 @@
-
-
+import asyncio
 import os
 
 
 def test_query():
-    from sqlagent.agent import arun
+    from sqlagent.agent import SQLAgent
 
-    import asyncio
-    try:
-        res = asyncio.run(arun(query="show tables", api_key=os.getenv("OPENAI_API_KEY",""), model="gpt-3.5-turbo",db_url=os.getenv("DATABASE_URL","")))
-        print(res)
-    except Exception as e:
-        print(str(e))
+    agent = SQLAgent(
+        db_url=os.getenv("DATABASE_URL", ""),
+        api_key=os.getenv("OPENAI_API_KEY", ""),
+        object_index_dir="./object_index",
+        model="gpt-3.5-turbo",
+    )
+    res = asyncio.run(agent.arun(query="give me toyota motor price"))
+    print(res)
+    assert isinstance(res, str)

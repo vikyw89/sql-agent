@@ -5,4 +5,7 @@
     "python.autoComplete.extraPaths": [
         "/usr/bin/python3"
     ],
+    "python.analysis.extraPaths": [
+        "/usr/bin/python3"
+    ],
 }

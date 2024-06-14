@@ -164,3 +164,4 @@ cython_debug/
 .vscode
 __pycache__
 .ruff_cache
+object_index
