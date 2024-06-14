@@ -1,0 +1,202 @@
+[
+    {
+        "table_name": "ca_change_name",
+        "table_summary": "Table 'ca_change_name' contains information about changes in company names, including the old name, new name, stock code, exchange, and creation/update timestamps."
+    },
+    {
+        "table_name": "ca_delisting",
+        "table_summary": "This table contains information about delisting events, including delisting date, stock details, company names in different languages, exchange information, reasons for delisting, and timestamps for creation and update."
+    },
+    {
+        "table_name": "ca_finance",
+        "table_summary": "Table 'ca_finance' contains financial data related to disclosure information, including details such as CA type, stock code, name, exchange information, offer details, cash information, dates, and timestamps."
+    },
+    {
+        "table_name": "ca_increase",
+        "table_summary": "Table 'ca_increase' stores information about the increase in CA (Change of Authority). It includes columns such as id, disclosure_ca_id, assignment_date, stock_code, name, kname, ename, exchg, kexchg, old, new, crash, created_at, and updated_at."
+    },
+    {
+        "table_name": "ca_ipo",
+        "table_summary": "Table 'ca_ipo' contains information about initial public offerings (IPOs) in Japan, including details such as ID, disclosure CA ID, exchange date, stock code, company names in Japanese and English, stock exchange, offer details, cash information, trade unit, and timestamps for creation and update."
+    },
+    {
+        "table_name": "ca_management",
+        "table_summary": "Table 'ca_management' stores information about companies, including their stock codes, names in different languages, exchange listings, designated dates, and other relevant details."
+    },
+    {
+        "table_name": "ca_merger",
+        "table_summary": "Table 'ca_merger' contains information about mergers and acquisitions, including details such as IDs, disclosure IDs, merger types, dates, stock codes, company names, exchange information, comments, and timestamps for creation and updates."
+    },
+    {
+        "table_name": "ca_offer",
+        "table_summary": "Table 'ca_offer' contains information about offers with columns such as id, disclosure_ca_id, start_date, end_date, stock_code, name, kname, ename, exchg, kexchg, agency, crash, comment, created_at, and updated_at."
+    },
+    {
+        "table_name": "ca_recond",
+        "table_summary": "Table 'ca_recond' stores information related to corporate actions records, including details such as disclosure ID, confirmation of rights date, stock code, company names in different languages, exchange listing, dates of rights activities, comments, and timestamps for creation and last update."
+    },
+    {
+        "table_name": "ca_regulation",
+        "table_summary": "Table 'ca_regulation' stores information about regulations for companies in California, including ID, disclosure ID, stock code, company name in Japanese and English, exchange information, month, limitation details, comments, and timestamps for creation and update."
+    },
+    {
+        "table_name": "ca_short_sale_regulation",
+        "table_summary": "Table 'ca_short_sale_regulation' stores information about short sale regulations in California, including disclosure IDs, base dates, stock codes, exchange codes, creation and update timestamps."
+    },
+    {
+        "table_name": "ca_split",
+        "table_summary": "Table 'ca_split' contains information about various corporate actions, including stock splits and consolidations. It includes columns such as id, disclosure_ca_id, ca_type, confirm_rights_date, stock_code, name, kname, ename, old, new, exchg, last_rights_date, ex_rights_date, comment, created_at, and updated_at."
+    },
+    {
+        "table_name": "ca_translate",
+        "table_summary": "Table 'ca_translate' includes information about changes in stock codes and names, along with their translations in different languages. It contains columns such as id, disclosure_ca_id, change_date, stock_code, name, kname, ename, old, excd, new, created_at, and updated_at."
+    },
+    {
+        "table_name": "ca_unit",
+        "table_summary": "Table 'ca_unit' contains information about stocks including ID, disclosure CA ID, change date, stock code, name in different languages, exchange information, old and new shares, creation and update timestamps."
+    },
+    {
+        "table_name": "disclosure_ca",
+        "table_summary": "Table 'disclosure_ca' contains information about stock disclosures including stock code, type of disclosure, creation and update timestamps."
+    },
+    {
+        "table_name": "dividend_info",
+        "table_summary": "Table 'dividend_info' contains information about dividend data for stocks, including stock ID, stock code, dividend amounts, periods, and source information."
+    },
+    {
+        "table_name": "dividend_rights_date_info",
+        "table_summary": "Table containing information about dividend rights, payment types, and dates related to stock codes"
+    },
+    {
+        "table_name": "enterprise",
+        "table_summary": "Table 'enterprise' consists of columns: id (INTEGER), name (VARCHAR(100)), corporate_code (VARCHAR(100)), address (VARCHAR(150)), phone_num (VARCHAR(100)), country_code (CHAR(3)), tier (INTEGER), status (CHAR(8)), created_at (DATETIME), updated_at (DATETIME), deleted_at (DATETIME)."
+    },
+    {
+        "table_name": "finance_info",
+        "table_summary": "Table 'finance_info' contains financial information with columns for stock details, performance indicators, revenue, profit, earnings per share, and important dates."
+    },
+    {
+        "table_name": "finance_info_consolidated",
+        "table_summary": "Consolidated financial information including revenue, profit, EPS, and other key performance indicators for different periods"
+    },
+    {
+        "table_name": "finance_metric",
+        "table_summary": "Table storing financial metrics and performance indicators for companies"
+    },
+    {
+        "table_name": "financial_statement",
+        "table_summary": "Summary of financial statement table containing various financial data and indicators such as net asset, total asset, equity, issued shares, cash flows, and balance sheet items."
+    },
+    {
+        "table_name": "industry_code",
+        "table_summary": "Table 'industry_code' contains information about industry codes with columns for jsec_code, name, created_at, and updated_at."
+    },
+    {
+        "table_name": "invite_admin",
+        "table_summary": "Table 'invite_admin' contains information about invited admins, including their IDs, email addresses, roles (owner, manager, developer), status (waiting or completed), and timestamps for creation and update."
+    },
+    {
+        "table_name": "jp_etf_info",
+        "table_summary": "Table 'jp_etf_info' contains information about Japanese ETFs, including stock codes, base dates, Japan indexes, ETF management company codes, rewards, investment type, market maker status, creation dates, and update dates."
+    },
+    {
+        "table_name": "jp_etf_management_company",
+        "table_summary": "Table 'jp_etf_management_company' contains information about ETF management companies including their unique ID, company code, name, and creation/update timestamps."
+    },
+    {
+        "table_name": "jp_etn_info",
+        "table_summary": "Table containing information about Japanese exchange traded notes (ETNs), including stock codes, index information, issuer codes, management costs, and relevant dates such as listing and repayment dates."
+    },
+    {
+        "table_name": "quant_strategy_top20_day",
+        "table_summary": "Table containing the top 20 stocks for various strategies such as beta, momentum, quality, value, and low-volatility on a daily basis."
+    },
+    {
+        "table_name": "sector_cap_rank",
+        "table_summary": "Table 'sector_cap_rank' contains information about the ranking of sectors based on market capitalization."
+    },
+    {
+        "table_name": "stock_analyst",
+        "table_summary": "Table containing information related to stock analysts including target prices, ratings, consensus data, valuation analysis, historical data, peer comparison, and analyst comments."
+    },
+    {
+        "table_name": "stock_brand",
+        "table_summary": "Table containing information about stock brands and their details"
+    },
+    {
+        "table_name": "stock_corporate_code",
+        "table_summary": "Table containing corporate codes for stocks, including information such as stock code, corporate code, and timestamps for creation and update."
+    },
+    {
+        "table_name": "stock_image",
+        "table_summary": "Table 'stock_image' stores information about stock images including ID, stock information ID, stock code, bucket name, key name, creation timestamp, and update timestamp."
+    },
+    {
+        "table_name": "stock_info",
+        "table_summary": "Table containing information about stocks including stock details, company information, and key dates related to the stock market"
+    },
+    {
+        "table_name": "stock_keyword",
+        "table_summary": "Table containing stock keywords associated with stock information"
+    },
+    {
+        "table_name": "stock_price_day",
+        "table_summary": "Table 'stock_price_day' stores daily stock price information including stock code, market type, date, open, high, low, close prices, volume, adjustment, trading value, tick count, and timestamps for creation and update."
+    },
+    {
+        "table_name": "stock_price_metric_day",
+        "table_summary": "Table 'stock_price_metric_day' contains daily stock price metrics including moving averages, Bollinger bands, MACD, envelopes, CCI, DMI, RSI, volume ratio, PSY line, and timestamps for created and updated entries."
+    },
+    {
+        "table_name": "stock_price_month",
+        "table_summary": "Table containing monthly stock price information including open, high, low, close prices, volume, and average volume for different stock codes."
+    },
+    {
+        "table_name": "stock_price_week",
+        "table_summary": "Table 'stock_price_week' stores weekly stock price data including stock information, price range (open, high, low, close), trading volume, and timestamps for creation and last update."
+    },
+    {
+        "table_name": "stock_sub",
+        "table_summary": "Table 'stock_sub' contains information about stock sub details such as stock code, sub name, and timestamps for creation and updates."
+    },
+    {
+        "table_name": "theme_access_rank",
+        "table_summary": "Table 'theme_access_rank' contains information about the ranking of themes in different countries, including theme IDs, names, ranks, and related details."
+    },
+    {
+        "table_name": "theme_hot",
+        "table_summary": "Table 'theme_hot' contains information about hot themes along with their details and dates. It includes columns such as id, theme_info_id, base_month, theme_no, hot_description, created_at, updated_at, and deleted_at."
+    },
+    {
+        "table_name": "theme_image",
+        "table_summary": "Table 'theme_image' stores information about theme images, including the image URL, file name, bucket name, key name, and timestamps for creation and updates."
+    },
+    {
+        "table_name": "theme_increase_rank",
+        "table_summary": "Table 'theme_increase_rank' contains information about the ranking of themes based on certain criteria such as country, theme name, and rank. It includes columns for id, base date, base time, country, theme info id, theme name, rank, last rank, created at, and updated at."
+    },
+    {
+        "table_name": "theme_index",
+        "table_summary": "Table 'theme_index' stores information about theme index data including IDs, theme information IDs, base dates, theme index values, returns, creation timestamps, and update timestamps."
+    },
+    {
+        "table_name": "theme_index_stocks",
+        "table_summary": "Table 'theme_index_stocks' stores information about stocks related to thematic indexes, including the ID, theme info ID, base date, stock code, correlation, creation timestamp, update timestamp, and deletion timestamp."
+    },
+    {
+        "table_name": "theme_info",
+        "table_summary": "Table 'theme_info' contains information about different themes, including theme ID, theme name in Japanese, theme name in Kana, description of the theme, associated country code, and timestamps for creation, update, and deletion."
+    },
+    {
+        "table_name": "theme_relation",
+        "table_summary": "Table 'theme_relation' stores information about the relation between different themes. It includes columns for id, theme_info_id, related_theme_id, created_at, updated_at, and deleted_at."
+    },
+    {
+        "table_name": "theme_stocks",
+        "table_summary": "Table 'theme_stocks' contains information about stocks related to various themes. It includes columns such as id, theme_info_id, stock_code, related_degree, created_at, updated_at, and deleted_at."
+    },
+    {
+        "table_name": "theme_synonym",
+        "table_summary": "Table 'theme_synonym' stores synonyms of themes along with their associated information like IDs, Japanese pronunciation, and timestamps for creation, update, and deletion."
+    }
+]
