@@ -25,6 +25,9 @@ from sqlagent.ingestions import (
     load_and_persist_object_index,
     load_and_persist_tables_row,
 )
+from typing import List
+from llama_index.core.query_pipeline import FnComponent
+
 
 class SQLAgent:
     def __init__(
@@ -74,9 +77,8 @@ class SQLAgent:
         self.table_parser_component = self._table_parser_component()
 
     async def _load_tables_row(self):
-        from sqlagent.ingestions.load_and_persist_tables_row import arun
 
-        return await arun(
+        return await load_and_persist_tables_row.arun(
             sql_database=self.sql_database,
             pinecone_api_key=self.pinecone_api_key,
             pinecone_host=self.pinecone_host,
@@ -85,8 +87,7 @@ class SQLAgent:
         )
 
     def _table_parser_component(self):
-        from typing import List
-        from llama_index.core.query_pipeline import FnComponent
+        
 
         def get_table_context_and_rows_str(
             query_str: str, table_schema_objs: List[SQLTableSchema]

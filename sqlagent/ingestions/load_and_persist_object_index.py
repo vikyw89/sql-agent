@@ -85,7 +85,7 @@ async def arun(
         obj_index = ObjectIndex.from_persist_dir(persist_dir=object_index_dir, object_node_mapping=table_node_mapping)
 
         return obj_index
-    except:
+    except Exception:
         print("object index not found, creating new one")
         pass
 
