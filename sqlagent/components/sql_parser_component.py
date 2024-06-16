@@ -18,7 +18,7 @@ def parse_response_to_sql(res: ChatResponse) -> str:
     sql_result_start = response.find("SQLResult:")
     if sql_result_start != -1:
         response = response[:sql_result_start]
-    return response.strip().strip("```").strip()
+    return response.strip().strip("```").strip("sql").strip("\n").strip()
 
 
 sql_parser_component = FnComponent(fn=parse_response_to_sql)
