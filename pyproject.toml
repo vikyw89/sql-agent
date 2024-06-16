@@ -1,22 +1,19 @@
 [tool.poetry]
 name = "sqlagent"
-version = "1.0.0"
+version = "1.0.2"
 description = "SQL agent, query your database"
 authors = ["vikyw89 <vikyw89@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = ">=3.11,<3.13"
-llama-index = "^0.10.44"
-python-dotenv = "^1.0.1"
-pymysql = "^1.1.1"
-llmtext = "^0.1.8"
-pyvis = "^0.3.2"
-llama-index-vector-stores-lancedb = "^0.1.5"
-llama-index-embeddings-openai = "^0.1.10"
+python = ">=3.10,<3.13"
+llama-index = "^0.10.00"
+python-dotenv = "^1.0.0"
+pymysql = "^1.1.0"
+llama-index-embeddings-openai = "^0.1.00"
 pinecone = "^4.0.0"
-llama-index-vector-stores-pinecone = "^0.1.7"
-
+llama-index-vector-stores-pinecone = "^0.1.0"
+llmtext = "1.0.0"
 
 [tool.poetry.group.dev.dependencies]
 ipykernel = "^6.29.4"
