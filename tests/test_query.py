@@ -7,3 +7,6 @@ def test_query():
     res = asyncio.run(agent.arun(query="give me toyota motor price"))
     print(res)
     assert isinstance(res, str)
+
+    res = asyncio.run(agent.arun(query="analysis of toyota motor"))
+    print(res)
