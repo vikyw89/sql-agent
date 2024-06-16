@@ -42,7 +42,7 @@ async def arun(
         
         # start indexing and generate embeddings
         with engine.connect() as conn:
-            cursor = conn.execute(text(f'SELECT * FROM {table_name}'))
+            cursor = conn.execute(text(f'SELECT * FROM {table_name} LIMIT 1000'))
             result = cursor.fetchall()
             row_tups = []
             for row in result:
