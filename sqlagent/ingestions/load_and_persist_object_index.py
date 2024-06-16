@@ -11,7 +11,7 @@ from llama_index.core.objects import (
     ObjectIndex,
     SQLTableSchema,
 )
-from llmtext.llms.openai import OpenAILLM
+from llmtext.llms.openai import OpenAILLM, AsyncOpenAI
 
 
 class TableInfo(BaseModel):
@@ -32,7 +32,7 @@ async def aextract_table_info(
 ) -> list[TableInfo]:
     tables = sql_database.get_usable_table_names()
 
-    llm = OpenAILLM(api_key=api_key, model=model)
+    llm = OpenAILLM(client=AsyncOpenAI(api_key=api_key),model=model)
 
     gather = []
     for table in tables:
