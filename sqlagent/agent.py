@@ -40,6 +40,8 @@ class SQLAgent:
         pinecone_api_key: str = os.getenv("PINECONE_API_KEY", ""),
         pinecone_host: str = os.getenv("PINECONE_HOST", ""),
         object_index_dir: str = "./object_index",
+        max_db_row_index: int | None = None,
+        ignore_tables: List[str] = ["admin", "admin_block", "api_key", "refresh_token"],
     ):
         self.db_url = db_url
         self.api_key = api_key
@@ -49,11 +51,13 @@ class SQLAgent:
         self.pinecone_host = pinecone_host
         self.object_index_dir = object_index_dir
         self.fallback_model = fallback_model
+        self.max_db_row_index = max_db_row_index
+        self.ignore_tables = ignore_tables
         self.llm = OpenAI(model=self.model, api_key=self.api_key)
         self.engine = create_engine(url=self.db_url, pool_recycle=3600, echo=True)
         self.sql_database = SQLDatabase(
             engine=self.engine,
-            ignore_tables=["admin", "admin_block", "api_key", "refresh_token"],
+            ignore_tables=self.ignore_tables,
         )
         self.table_node_mapping = SQLTableNodeMapping(self.sql_database)
         self.sql_retriever = SQLRetriever(self.sql_database)
@@ -63,6 +67,7 @@ class SQLAgent:
                 api_key=self.api_key,
                 object_index_dir=self.object_index_dir,
                 model=self.model,
+                sql_database=self.sql_database,
             )
         )
         self.table_row_index = asyncio.run(
@@ -72,23 +77,12 @@ class SQLAgent:
                 pinecone_host=self.pinecone_host,
                 embedding_model=self.embedding_model,
                 openai_api_key=self.api_key,
+                max_row_index=self.max_db_row_index,
             )
         )
         self.table_parser_component = self._table_parser_component()
 
-    async def _load_tables_row(self):
-
-        return await load_and_persist_tables_row.arun(
-            sql_database=self.sql_database,
-            pinecone_api_key=self.pinecone_api_key,
-            pinecone_host=self.pinecone_host,
-            embedding_model=self.embedding_model,
-            openai_api_key=self.api_key,
-        )
-
     def _table_parser_component(self):
-        
-
         def get_table_context_and_rows_str(
             query_str: str, table_schema_objs: List[SQLTableSchema]
         ):

@@ -2,9 +2,6 @@ import asyncio
 import os
 
 from pydantic import BaseModel, Field
-from sqlalchemy import (
-    create_engine,
-)
 from llama_index.core import SQLDatabase
 from llama_index.core.objects import (
     SQLTableNodeMapping,
@@ -32,7 +29,7 @@ async def aextract_table_info(
 ) -> list[TableInfo]:
     tables = sql_database.get_usable_table_names()
 
-    llm = OpenAILLM(client=AsyncOpenAI(api_key=api_key),model=model)
+    llm = OpenAILLM(client=AsyncOpenAI(api_key=api_key), model=model)
 
     gather = []
     for table in tables:
@@ -66,23 +63,19 @@ Here's the sample data
 async def arun(
     db_url: str,
     api_key: str,
+    sql_database: SQLDatabase,
     model: str = "gpt-3.5-turbo",
     object_index_dir: str = "./object_index",
 ) -> ObjectIndex:
-    engine = create_engine(url=db_url, pool_recycle=3600, echo=True)
-
-    sql_database = SQLDatabase(
-        engine,
-        ignore_tables=["admin", "admin_block", "api_key", "refresh_token"],
-    )
-
     print("creating table node mapping")
     table_node_mapping = SQLTableNodeMapping(sql_database)
     # create index if it doesn't exist yet
     try:
         # load object index
         print("loading object index")
-        obj_index = ObjectIndex.from_persist_dir(persist_dir=object_index_dir, object_node_mapping=table_node_mapping)
+        obj_index = ObjectIndex.from_persist_dir(
+            persist_dir=object_index_dir, object_node_mapping=table_node_mapping
+        )
 
         return obj_index
     except Exception:
@@ -90,7 +83,6 @@ async def arun(
         pass
 
     print("creating new object index")
-
 
     print("extracting table info")
     table_infos = await aextract_table_info(
@@ -106,6 +98,8 @@ async def arun(
     print("persisting object index")
     # create object index only if it doesn't exist yet
     obj_index = ObjectIndex.from_objects(table_schema_objs, table_node_mapping)
-    obj_index.persist(persist_dir=object_index_dir, obj_node_mapping_fname=object_index_dir)
+    obj_index.persist(
+        persist_dir=object_index_dir, obj_node_mapping_fname=object_index_dir
+    )
 
     return obj_index

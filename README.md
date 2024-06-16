@@ -23,26 +23,18 @@ pip install sqlagent
 
 Here's a quick example to get you started:
 
-### Step 1: Do ingestion of db
-
-```python
-from sqlagent.ingestions import load_and_persist_object_index
-
-await load_and_persist_object_index.arun(db_url=os.getenv("DATABASE_URL",""), api_key=os.getenv("OPENAI_API_KEY",""),object_index_dir="./object_index", model="gpt-3.5-turbo")
-```
-
-### Step 2: Initialize the Agent
+### Step 1: Initiate instance
 
 ```python
 # Create an instance of the SQLAgent
+from sqlagent.agent import SQLAgent
 agent = SQLAgent(db_connection_string="your_database_connection_string")
 ```
 
-### Step 3: Query the Database
+### Step 2: Query the Database
 
 ```python
-from sqlagent import agent
-await agent.arun(query="show tables", api_key=os.getenv("OPENAI_API_KEY",""), model="gpt-3.5-turbo",db_url=os.getenv("DATABASE_URL",""))
+await agent.arun("how many tables are there in my db ?")
 ```
 
 ## Configuration
