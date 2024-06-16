@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "sqlagent"
-version = "0.1.8"
+version = "1.0.0"
 description = "SQL agent, query your database"
 authors = ["vikyw89 <vikyw89@gmail.com>"]
 readme = "README.md"
@@ -11,10 +11,13 @@ llama-index = "^0.10.44"
 python-dotenv = "^1.0.1"
 pymysql = "^1.1.1"
 llmtext = "^0.1.8"
-
 pyvis = "^0.3.2"
 llama-index-vector-stores-lancedb = "^0.1.5"
 llama-index-embeddings-openai = "^0.1.10"
+pinecone = "^4.0.0"
+llama-index-vector-stores-pinecone = "^0.1.7"
+
+
 [tool.poetry.group.dev.dependencies]
 ipykernel = "^6.29.4"
 pyvis = "^0.3.2"

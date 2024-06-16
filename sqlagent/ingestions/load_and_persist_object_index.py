@@ -75,18 +75,37 @@ async def arun(
         engine,
         ignore_tables=["admin", "admin_block", "api_key", "refresh_token"],
     )
-    table_node_mapping = SQLTableNodeMapping(sql_database)
 
+    print("creating table node mapping")
+    table_node_mapping = SQLTableNodeMapping(sql_database)
+    # create index if it doesn't exist yet
+    try:
+        # load object index
+        print("loading object index")
+        obj_index = ObjectIndex.from_persist_dir(persist_dir=object_index_dir, object_node_mapping=table_node_mapping)
+
+        return obj_index
+    except:
+        print("object index not found, creating new one")
+        pass
+
+    print("creating new object index")
+
+
+    print("extracting table info")
     table_infos = await aextract_table_info(
         sql_database=sql_database, api_key=api_key, model=model
     )
 
+    print("creating table schema objects")
     table_schema_objs = [
         SQLTableSchema(table_name=t.table_name, context_str=t.table_summary)
         for t in table_infos
     ]
+
+    print("persisting object index")
     # create object index only if it doesn't exist yet
     obj_index = ObjectIndex.from_objects(table_schema_objs, table_node_mapping)
-    obj_index.persist(persist_dir=object_index_dir)
+    obj_index.persist(persist_dir=object_index_dir, obj_node_mapping_fname=object_index_dir)
 
     return obj_index

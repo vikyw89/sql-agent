@@ -2,6 +2,7 @@ from llama_index.core.query_pipeline import (
     QueryPipeline as QP,
     InputComponent,
 )
+from llama_index.embeddings.openai import OpenAIEmbeddingModelType
 from llama_index.llms.openai import OpenAI
 from llama_index.core.prompts import PromptTemplate
 import os
@@ -10,18 +11,20 @@ from sqlalchemy import (
 )
 from llama_index.core.objects import (
     SQLTableNodeMapping,
-    ObjectIndex,
 )
 from llama_index.core import SQLDatabase
 from llama_index.core.retrievers import SQLRetriever
 from sqlagent.components.sql_parser_component import sql_parser_component
 from llama_index.core.prompts.default_prompts import DEFAULT_TEXT_TO_SQL_PROMPT
-from llama_index.core.query_pipeline import FnComponent
 from llama_index.core.objects import (
     SQLTableSchema,
 )
 from llama_index.core.llms import ChatResponse
-
+import asyncio
+from sqlagent.ingestions import (
+    load_and_persist_object_index,
+    load_and_persist_tables_row,
+)
 
 class SQLAgent:
     def __init__(
@@ -30,10 +33,9 @@ class SQLAgent:
         api_key: str = os.getenv("OPENAI_API_KEY", ""),
         model: str = "gpt-3.5-turbo",
         fallback_model: str = "gpt-4o",
-        embedding_model: str = "text-embedding-ada-002",
+        embedding_model: OpenAIEmbeddingModelType = OpenAIEmbeddingModelType.TEXT_EMBED_3_SMALL,
         pinecone_api_key: str = os.getenv("PINECONE_API_KEY", ""),
         pinecone_host: str = os.getenv("PINECONE_HOST", ""),
-        pinecone_namespace: str = os.getenv("PINECONE_NAMESPACE", "default"),
         object_index_dir: str = "./object_index",
     ):
         self.db_url = db_url
@@ -42,7 +44,6 @@ class SQLAgent:
         self.embedding_model = embedding_model
         self.pinecone_api_key = pinecone_api_key
         self.pinecone_host = pinecone_host
-        self.pinecone_namespace = pinecone_namespace
         self.object_index_dir = object_index_dir
         self.fallback_model = fallback_model
         self.llm = OpenAI(model=self.model, api_key=self.api_key)
@@ -53,45 +54,75 @@ class SQLAgent:
         )
         self.table_node_mapping = SQLTableNodeMapping(self.sql_database)
         self.sql_retriever = SQLRetriever(self.sql_database)
-        self.table_parser_component = FnComponent(fn=self._get_table_context_str)
+        self.object_index = asyncio.run(
+            load_and_persist_object_index.arun(
+                db_url=self.db_url,
+                api_key=self.api_key,
+                object_index_dir=self.object_index_dir,
+                model=self.model,
+            )
+        )
+        self.table_row_index = asyncio.run(
+            load_and_persist_tables_row.arun(
+                sql_database=self.sql_database,
+                pinecone_api_key=self.pinecone_api_key,
+                pinecone_host=self.pinecone_host,
+                embedding_model=self.embedding_model,
+                openai_api_key=self.api_key,
+            )
+        )
+        self.table_parser_component = self._table_parser_component()
 
-    async def ingest_db(self) -> ObjectIndex:
-        from sqlagent.ingestions.load_and_persist_object_index import arun
+    async def _load_tables_row(self):
+        from sqlagent.ingestions.load_and_persist_tables_row import arun
 
         return await arun(
-            db_url=self.db_url,
-            api_key=self.api_key,
-            object_index_dir=self.object_index_dir,
-            model=self.model,
+            sql_database=self.sql_database,
+            pinecone_api_key=self.pinecone_api_key,
+            pinecone_host=self.pinecone_host,
+            embedding_model=self.embedding_model,
+            openai_api_key=self.api_key,
         )
 
-    def _get_table_context_str(self, table_schema_objs: list[SQLTableSchema]):
-        """Get table context string."""
-        context_strs = []
-        for table_schema_obj in table_schema_objs:
-            table_info = self.sql_database.get_single_table_info(
-                table_schema_obj.table_name
-            )
-            if table_schema_obj.context_str:
-                table_opt_context = " The table description is: "
-                table_opt_context += table_schema_obj.context_str
-                table_info += table_opt_context
+    def _table_parser_component(self):
+        from typing import List
+        from llama_index.core.query_pipeline import FnComponent
 
-            context_strs.append(table_info)
-        return "\n\n".join(context_strs)
+        def get_table_context_and_rows_str(
+            query_str: str, table_schema_objs: List[SQLTableSchema]
+        ):
+            """Get table context string."""
+            context_strs = []
+            for table_schema_obj in table_schema_objs:
+                # first append table info + additional context
+                table_info = self.sql_database.get_single_table_info(
+                    table_schema_obj.table_name
+                )
+                if table_schema_obj.context_str:
+                    table_opt_context = " The table description is: "
+                    table_opt_context += table_schema_obj.context_str
+                    table_info += table_opt_context
+
+                # also lookup vector index to return relevant table rows
+                vector_retriever = self.table_row_index[ 
+                    table_schema_obj.table_name
+                ].as_retriever(similarity_top_k=2)
+
+                relevant_nodes = vector_retriever.retrieve(query_str)
+                if len(relevant_nodes) > 0:
+                    table_row_context = "\nHere are some relevant example rows (values in the same order as columns above)\n"
+                    for node in relevant_nodes:
+                        table_row_context += str(node.get_content()) + "\n"
+                    table_info += table_row_context
+
+                context_strs.append(table_info)
+            return "\n\n".join(context_strs)
+
+        table_parser_component = FnComponent(fn=get_table_context_and_rows_str)
+        return table_parser_component
 
     async def arun(self, query: str):
-        obj_index = None
-        try:
-            obj_index = ObjectIndex.from_persist_dir(
-                persist_dir=self.object_index_dir,
-                object_node_mapping=self.table_node_mapping,
-            )
-        except Exception as e:
-            print(e)
-            obj_index = await self.ingest_db()
-            
-        obj_retriever = obj_index.as_retriever(similarity_top_k=3)
+        obj_retriever = self.object_index.as_retriever(similarity_top_k=3)  # type: ignore
 
         # TEXT TO SQL
         text2sql_prompt = DEFAULT_TEXT_TO_SQL_PROMPT.partial_format(
@@ -126,7 +157,11 @@ class SQLAgent:
             },
             verbose=True,
         )
-        qp.add_chain(["input", "table_retriever", "table_output_parser"])
+        qp.add_link("input", "table_retriever")
+        qp.add_link("input", "table_output_parser", dest_key="query_str")
+        qp.add_link(
+            "table_retriever", "table_output_parser", dest_key="table_schema_objs"
+        )
         qp.add_link("input", "text2sql_prompt", dest_key="query_str")
         qp.add_link("table_output_parser", "text2sql_prompt", dest_key="schema")
         qp.add_chain(
@@ -140,7 +175,6 @@ class SQLAgent:
         )
         qp.add_link("input", "response_synthesis_prompt", dest_key="query_str")
         qp.add_link("response_synthesis_prompt", "response_synthesis_llm")
-
         try:
             response: ChatResponse = qp.run(query=query)
             return str(response.message.content) if response.message is not None else ""

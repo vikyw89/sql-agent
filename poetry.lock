@@ -1626,6 +1626,21 @@ llama-index-core = ">=0.10.1,<0.11.0"
 tantivy = "*"
 
 [[package]]
+name = "llama-index-vector-stores-pinecone"
+version = "0.1.7"
+description = "llama-index vector_stores pinecone integration"
+optional = false
+python-versions = "<3.13,>=3.8.1"
+files = [
+    {file = "llama_index_vector_stores_pinecone-0.1.7-py3-none-any.whl", hash = "sha256:fa2facf546322cc05104d209624d48953386e6ea4f512e13be2daf11deb91936"},
+    {file = "llama_index_vector_stores_pinecone-0.1.7.tar.gz", hash = "sha256:594811f36823e049f94c9d871d6889d535b0169da28016fdcbb5d22946694ac7"},
+]
+
+[package.dependencies]
+llama-index-core = ">=0.10.11.post1,<0.11.0"
+pinecone-client = ">=3.0.2,<4.0.0"
+
+[[package]]
 name = "llama-parse"
 version = "0.4.4"
 description = "Parse files into RAG-Optimized formats."
@@ -2394,6 +2409,52 @@ mic = ["olefile"]
 tests = ["check-manifest", "coverage", "defusedxml", "markdown2", "olefile", "packaging", "pyroma", "pytest", "pytest-cov", "pytest-timeout"]
 typing = ["typing-extensions"]
 xmp = ["defusedxml"]
+
+[[package]]
+name = "pinecone"
+version = "4.0.0"
+description = "Pinecone client and SDK"
+optional = false
+python-versions = "<4.0,>=3.8"
+files = [
+    {file = "pinecone-4.0.0-py3-none-any.whl", hash = "sha256:63c441c4ddab70c2acc7436d7f7e78e33d7d47b894093c3a9016b46b4173c47f"},
+    {file = "pinecone-4.0.0.tar.gz", hash = "sha256:47e3e7b8f4a0da9a8339fa63f3d4f9a260b03d2cc53f2ad83d17f3fee947861e"},
+]
+
+[package.dependencies]
+certifi = ">=2019.11.17"
+tqdm = ">=4.64.1"
+typing-extensions = ">=3.7.4"
+urllib3 = [
+    {version = ">=1.26.0", markers = "python_version >= \"3.8\" and python_version < \"3.12\""},
+    {version = ">=1.26.5", markers = "python_version >= \"3.12\" and python_version < \"4.0\""},
+]
+
+[package.extras]
+grpc = ["googleapis-common-protos (>=1.53.0)", "grpcio (>=1.44.0)", "grpcio (>=1.59.0)", "lz4 (>=3.1.3)", "protobuf (>=4.25,<5.0)", "protoc-gen-openapiv2 (>=0.0.1,<0.0.2)"]
+
+[[package]]
+name = "pinecone-client"
+version = "3.2.2"
+description = "Pinecone client and SDK"
+optional = false
+python-versions = "<4.0,>=3.8"
+files = [
+    {file = "pinecone_client-3.2.2-py3-none-any.whl", hash = "sha256:7e492fdda23c73726bc0cb94c689bb950d06fb94e82b701a0c610c2e830db327"},
+    {file = "pinecone_client-3.2.2.tar.gz", hash = "sha256:887a12405f90ac11c396490f605fc479f31cf282361034d1ae0fccc02ac75bee"},
+]
+
+[package.dependencies]
+certifi = ">=2019.11.17"
+tqdm = ">=4.64.1"
+typing-extensions = ">=3.7.4"
+urllib3 = [
+    {version = ">=1.26.0", markers = "python_version >= \"3.8\" and python_version < \"3.12\""},
+    {version = ">=1.26.5", markers = "python_version >= \"3.12\" and python_version < \"4.0\""},
+]
+
+[package.extras]
+grpc = ["googleapis-common-protos (>=1.53.0)", "grpc-gateway-protoc-gen-openapiv2 (==0.1.0)", "grpcio (>=1.44.0)", "grpcio (>=1.59.0)", "lz4 (>=3.1.3)", "protobuf (>=3.20.0,<3.21.0)"]
 
 [[package]]
 name = "platformdirs"
@@ -4158,4 +4219,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.11,<3.13"
-content-hash = "523f356094559584829195eceec1ee3cb1093ec679895056cf03fa9b340b36b7"
+content-hash = "f684600991842a1d951a47766afe8e1aa503d10f8d47ca27f77655358761be43"
